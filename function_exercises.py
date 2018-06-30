@@ -93,11 +93,15 @@ def temp(temp_c):
 celcius = 23
 fahrenheit = temp(celcius)
 
-xs = list(range(celcius, int(fahrenheit)))
+xs = list(range(0, 100))
 ys = []
 
-for x in xs:
-    ys.append(f(x))
+# for x in xs:
+#     ys.append(f(x))
+y = 0
+while y != 100:
+    y += 1
+    ys.append(temp(y))
 
 plot.plot(xs, ys)
 plot.show()
