@@ -15,6 +15,8 @@ class Medic(Character):
         self.name = 'Medic'
         self.bounty = 3
     def attack(medic, hero):
+        if hero.armor == 2:
+            medic.power -= 1
         # Before attacking, medic has 20% prob of recuperating 2 health points
         p = random.randint(1, 6)
         if p == 1: # 20% prob that random number will be 1
@@ -35,6 +37,8 @@ class Shadow(Character):
         self.name = 'Shadow'
         self.bounty = 6
     def attack(shadow, hero):
+        if hero.armor == 2:
+            shadow.power -= 1
         # Shadow attacks hero
         hero.health -= shadow.power
         print("The Shadow does {} damage to you.".format(shadow.power))
@@ -50,6 +54,8 @@ class Zombie(Character):
         self.name = 'Zombie'
         # self.bounty = 2
     def attack(zombie, hero):
+        if hero.armor == 2:
+            zombie.power -= 1
         # Zombie attacks hero
         hero.health -= zombie.power
         print("The zombie does {} damage to you.".format(zombie.power))
@@ -65,6 +71,8 @@ class Tank(Character): # Tank has large amount of health but small amount of pow
         self.name = 'Tank'
         self.bounty = 7
     def attack(tank, hero):
+        if hero.armor == 2:
+            tank.power -= 1
         # Tank attacks hero
         hero.health -= tank.power
         print("The Tank does {} damage to you.".format(tank.power))
@@ -80,6 +88,8 @@ class Tryndamere(Character): # Once tryndamere reaches 0 health point, he will b
         self.name = 'Tryndamere'
         self.bounty = 7
     def attack(tryndamere, hero):
+        if hero.armor == 2:
+            tryndamere.power -= 1
         # Tryndamere attacks hero
         hero.health -= tryndamere.power
         print("The Tryndamere does {} damage to you.".format(Tryndamere.power))
@@ -93,6 +103,8 @@ class Hero(Character):
         super().__init__(health, power)
         self.name = 'Hero'
         self.coins = 0
+        self.armor = 0
+        self.evade = 0
     def attack(hero, enemy):
         if enemy.name == 'Goblin':
             # Hero attacks goblin
@@ -190,6 +202,8 @@ class Goblin(Character):
         self.bounty = 5
     def attack(goblin, hero):
         # Goblin attacks hero
+        if hero.armor == 2: # Reduce character power if hero has armor
+            goblin.power -= 1
         hero.health -= goblin.power
         print("The goblin does {} damage to you.".format(goblin.power))
         if hero.health <= 0:
@@ -219,7 +233,7 @@ class Evade:
         print('Hero evade is now {}'.format(self.evade))
 
 class Store:
-    items = [SuperTonic()]
+    items = [SuperTonic(), Armor(), Evade()]
     def shop(self, hero):
         print('Hero has {} coins.'.format(hero.coins))
         for i in range(0, len(Store.items)):
