@@ -13,7 +13,7 @@ class Medic(Character):
     def __init__(self, health, power):
         super().__init__(health, power)
         self.name = 'Medic'
-
+        self.bounty = 3
     def attack(medic, hero):
         # Before attacking, medic has 20% prob of recuperating 2 health points
         p = random.randint(1, 6)
@@ -33,6 +33,7 @@ class Shadow(Character):
     def __init__(self, health, power):
         super().__init__(health, power)
         self.name = 'Shadow'
+        self.bounty = 6
     def attack(shadow, hero):
         # Shadow attacks hero
         hero.health -= shadow.power
@@ -47,7 +48,7 @@ class Zombie(Character):
     def __init__(self, health, power):    
         super().__init__(health, power)
         self.name = 'Zombie'
-
+        # self.bounty = 2
     def attack(zombie, hero):
         # Zombie attacks hero
         hero.health -= zombie.power
@@ -62,7 +63,7 @@ class Tank(Character): # Tank has large amount of health but small amount of pow
     def __init__(self, health, power):    
         super().__init__(health, power)
         self.name = 'Tank'
-
+        self.bounty = 7
     def attack(tank, hero):
         # Tank attacks hero
         hero.health -= tank.power
@@ -77,6 +78,7 @@ class Tryndamere(Character): # Once tryndamere reaches 0 health point, he will b
     def __init__(self, health, power):
         super().__init__(health, power)
         self.name = 'Tryndamere'
+        self.bounty = 7
     def attack(tryndamere, hero):
         # Tryndamere attacks hero
         hero.health -= tryndamere.power
@@ -90,6 +92,7 @@ class Hero(Character):
     def __init__(self, health, power):    
         super().__init__(health, power)
         self.name = 'Hero'
+        self.coins = 0
     def attack(hero, enemy):
         if enemy.name == 'Goblin':
             # Hero attacks goblin
@@ -102,6 +105,8 @@ class Hero(Character):
                 print("You do {} damage to the goblin.".format(hero.power))
             if goblin.health <= 0:
                 print("The goblin is dead.")
+                print("You've collected the Goblin's bounty of {} coins.".format(enemy.bounty))
+                hero.coins += enemy.bounty
         elif enemy.name == 'Medic':
             # Hero attacks medic
             p = random.randint(1, 6) # Double damage is random numbers match, 20% prob
@@ -113,6 +118,8 @@ class Hero(Character):
                 print("You do {} damage to the medic.".format(hero.power))
             if medic.health <= 0:
                 print("The medic is dead.")
+                print("You've collected the Medic's bounty of {} coins.".format(enemy.bounty))
+                hero.coins += enemy.bounty
         elif enemy.name == 'Shadow':
             no_dodge = random.randint(1, 11)
             if no_dodge == 1:
@@ -126,6 +133,8 @@ class Hero(Character):
                     print("You do {} damage to the shadow.".format(hero.power))
                 if shadow.health <= 0:
                     print("The Shadow is dead.")
+                    print("You've collected the Shadow's bounty of {} coins.".format(enemy.bounty))
+                    hero.coins += enemy.bounty
             else:
                 print('You missed the Shadow.')
         elif enemy.name == 'Zombie':
@@ -150,6 +159,8 @@ class Hero(Character):
                 print("You do {} damage to the Tank.".format(hero.power))
             if tank.health <= 0:
                 print("The Tank is dead.")
+                print("You've collected the Tank's bounty of {} coins.".format(enemy.bounty))
+                hero.coins += enemy.bounty
         elif enemy.name == 'Tryndamere':
             second_wind = 1
             # Hero attacks Tryndamere
@@ -162,6 +173,8 @@ class Hero(Character):
                 print("You do {} damage to the tryndamere.".format(hero.power))
             if tryndamere.health <= 0 and second_wind == 0:
                 print("The tryndamere is dead.")
+                print("You've collected the Tryndamere's bounty of {} coins.".format(enemy.bounty))
+                hero.coins += enemy.bounty
             else:
                 second_wind -= 1
                 enemy.health += 2
@@ -174,6 +187,7 @@ class Goblin(Character):
     def __init__(self, health, power):    
         super().__init__(health, power)
         self.name = 'Goblin'
+        self.bounty = 5
     def attack(goblin, hero):
         # Goblin attacks hero
         hero.health -= goblin.power
@@ -183,6 +197,44 @@ class Goblin(Character):
     
     def print_status(goblin):
         print("The goblin has {} health and {} power.".format(goblin.health, goblin.power))
+
+
+class SuperTonic:
+    cost = 5
+    name = 'SuperTonic'
+    def apply(self):
+        self.health = 10
+        print('{}\'s health is now {}'.format(self.name, self.health))
+class Armor:
+    cost = 2
+    name = 'Armor'
+    def apply(self):
+        self.armor += 2
+        print('Hero armor is now {}'.format(self.armor))
+class Evade:
+    cost = 6
+    name = 'Evade'
+    def apply(self):
+        self.evade += 2
+        print('Hero evade is now {}'.format(self.evade))
+
+class Store:
+    items = [SuperTonic()]
+    def shop(self, hero):
+        print('Hero has {} coins.'.format(hero.coins))
+        for i in range(0, len(Store.items)):
+            item = Store.items[i]
+            print("{}. {}: {}".format(i+1, item.name, item.cost))
+        print('10. Exit Shop')
+
+        option = int(input("Enter Option: "))
+
+        if option == 10:
+            pass
+        else:
+            hero.buy(Store.items[option - 1])
+
+
 
 hero = Hero(10, 5)
 goblin = Goblin(6, 2)
@@ -225,4 +277,4 @@ def main(hero, enemy):
             # enemy attacks hero
             enemy.attack(hero)
 
-main(hero, zombie)
+main(hero, goblin)
