@@ -292,3 +292,5 @@ def main(hero, enemy):
             enemy.attack(hero)
 
 main(hero, goblin)
+
+# testing commit after rename
